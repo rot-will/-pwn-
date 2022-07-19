@@ -1,16 +1,16 @@
-usage: ./auto_inspwn [mode]
-    -y  指定使用默认选项
-    apt            配置apt源
-    python         安装python2与python3
-    pwntools       为python2与python3安装pwntools
-    libcsearcher   为python2与python3安装LibcSearcher
-    gdb            安装gdb，及其peda,peda-arm,peda-intel,pwndbg,gef插件
-    one_gadget     安装one_gadget
-    patchelf       安装patchelf
-    ropper         安装ropper
-    qemu           安装qemu
-    binwalk        安装binwalk
-    nc             安装nc,netcat-traditional版本为存在-e参数的版本
-    alpha          安装alpha，用于为shellcode进行编码
-    seccomp        安装seccomp-tools
-    all            执行以上所有
+usage:&nbsp;./auto_inspwn&nbsp;[mode]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-y&nbsp;&nbsp;指定使用默认选项
+&nbsp;&nbsp;&nbsp;&nbsp;apt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;配置apt源
+&nbsp;&nbsp;&nbsp;&nbsp;python&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装python2与python3
+&nbsp;&nbsp;&nbsp;&nbsp;pwntools&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为python2与python3安装pwntools
+&nbsp;&nbsp;&nbsp;&nbsp;libcsearcher&nbsp;&nbsp;&nbsp;为python2与python3安装LibcSearcher
+&nbsp;&nbsp;&nbsp;&nbsp;gdb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装gdb，及其peda,peda-arm,peda-intel,pwndbg,gef插件
+&nbsp;&nbsp;&nbsp;&nbsp;one_gadget&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装one_gadget
+&nbsp;&nbsp;&nbsp;&nbsp;patchelf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装patchelf
+&nbsp;&nbsp;&nbsp;&nbsp;ropper&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装ropper
+&nbsp;&nbsp;&nbsp;&nbsp;qemu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装qemu
+&nbsp;&nbsp;&nbsp;&nbsp;binwalk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装binwalk
+&nbsp;&nbsp;&nbsp;&nbsp;nc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装nc,netcat-traditional版本为存在-e参数的版本
+&nbsp;&nbsp;&nbsp;&nbsp;alpha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装alpha，用于为shellcode进行编码
+&nbsp;&nbsp;&nbsp;&nbsp;seccomp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装seccomp-tools
+&nbsp;&nbsp;&nbsp;&nbsp;all&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;执行以上所有
