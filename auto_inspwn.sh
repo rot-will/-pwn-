@@ -685,11 +685,34 @@ function all_install(){
 
 }
 
+function usage(){
+    echo "usage: ./auto_inspwn [mode]"
+    echo "    -y  指定使用默认选项"
+    echo "    apt            配置apt源"
+    echo "    python         安装python2与python3"
+    echo "    pwntools       为python2与python3安装pwntools"
+    echo "    libcsearcher   为python2与python3安装LibcSearcher"
+    echo "    gdb            安装gdb，及其peda,peda-arm,peda-intel,pwndbg,gef插件"
+    echo "    one_gadget     安装one_gadget"
+    echo "    patchelf       安装patchelf"
+    echo "    ropper         安装ropper"
+    echo "    qemu           安装qemu"
+    echo "    binwalk        安装binwalk"
+    echo "    nc             安装nc,netcat-traditional版本为存在-e参数的版本"
+    echo "    alpha          安装alpha，用于为shellcode进行编码"
+    echo "    seccomp        安装seccomp-tools"
+    echo "    all            执行以上所有"
+}
+
 function main(){ 
+    if [[ -z $* ||  $* == "-y" ]]; then
+        usage
+        return
+    fi
     if [[ $* =~ "-y" ]];then
         is_def=0
     fi
-        
+    
     for i in $*
     do
         case $i in 
