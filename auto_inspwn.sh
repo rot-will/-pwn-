@@ -425,7 +425,7 @@ function gdb_install(){
     else
         git clone https://github.com/hugsy/gef.git ~/gef
         if [[ $? == 0 ]] ; then
-            echo -e "define gef\n source ~/gef/geg.py\n end" >> ~/.gdbinit
+            echo -e "define gef\n source ~/gef/gef.py\n end" >> ~/.gdbinit
             echo -e "#!/bin/sh\nexec gdb -ex gef" > /bin/gef
         else
             info "error" 利用git获取gef失败，请检查网络配置
@@ -582,12 +582,18 @@ function binwalk_install(){
         do
             get_yesno "python3可能不存在，是否尝试安装" 0 1
             if [[ $? != 0 ]];then
+                cd ..
+                rm -rf "v2.3.3.zip"
+                rm -rf "binwalk-2.3.3"
                 return -1
             else
                 python_install 3
             fi
             python3 setup.py install
         done
+        cd ..
+        rm -rf "v2.3.3.zip"
+        rm -rf "binwalk-2.3.3"
     else
         info "wrong" "binwalk已安装，无需重新安装"
     fi
