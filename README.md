@@ -1,5 +1,5 @@
 usage:&nbsp;./auto_inspwn&nbsp;[mode]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-y&nbsp;&nbsp;指定使用默认选项<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-y&nbsp;&nbsp;指定使用默认选项（慎用，可能导致死循环）<br>
 &nbsp;&nbsp;&nbsp;&nbsp;apt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;配置apt源<br>
 &nbsp;&nbsp;&nbsp;&nbsp;python&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装python2与python3<br>
 &nbsp;&nbsp;&nbsp;&nbsp;pwntools&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为python2与python3安装pwntools<br>
