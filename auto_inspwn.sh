@@ -392,7 +392,7 @@ function gdb_install(){
         fi
         
         if [[ -e ~/peda-arm ]]; then
-            info "wrong" "peda-arm已安装，不需要重复安装"
+            info "wrong" "peda-arm与peda-intel已安装，不需要重复安装"
             peda_arm="define init_peda-arm\n source ~/peda-arm/peda-arm.py\n end\n"
             echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-arm \$@" > /bin/peda-arm
     
