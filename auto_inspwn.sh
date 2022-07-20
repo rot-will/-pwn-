@@ -359,6 +359,11 @@ function libcsearch_install(){
 function gdb_install(){
     info "info" "gdb install start"
     gdb --version >/dev/null 2>/dev/null
+    local peda=""
+    local peda_arm=""
+    local pwndbg=""
+    local peda_intel=""
+    local gef=""
     if [[ $? != 0 ]];then
         apt install gdb -y
     fi
@@ -370,13 +375,13 @@ function gdb_install(){
     mv ~/.gdbinit ~/.gdbinit.back 2>/dev/null
     if [[ -e ~/peda ]]; then
         info "wrong" "peda已安装，不需要重复安装"
-        echo -e "define peda\n source ~/peda/peda.py\n end" >> ~/.gdbinit
-        echo -e "#!/bin/sh\nexec gdb -ex peda" >> /bin/peda
+        peda="define init_peda\n source ~/peda/peda.py\n end\n"
+        echo -e "#!/bin/sh\nexec gdb -q -ex init_peda \$@" > /bin/peda
     else
         git clone https://github.com/longld/peda.git ~/peda
         if [[ $? == 0 ]] ; then
-            echo -e "define peda\n source ~/peda/peda.py\n end" >> ~/.gdbinit
-            echo -e "#!/bin/sh\nexec gdb -ex peda" >> /bin/peda
+            peda="define init_peda\n source ~/peda/peda.py\n end\n"
+            echo -e "#!/bin/sh\nexec gdb -q -ex init_peda \$@" > /bin/peda
         else
             info "error" 利用git获取peda失败，请检查网络配置
             exit -1
@@ -385,19 +390,19 @@ function gdb_install(){
     
     if [[ -e ~/peda-arm ]]; then
         info "wrong" "peda-arm已安装，不需要重复安装"
-        echo -e "define peda-arm\n source ~/peda-arm/peda-arm.py\n end" >> ~/.gdbinit
-        echo -e "#!/bin/sh\nexec gdb -ex peda-arm" > /bin/peda-arm
+        peda_arm="define init_peda-arm\n source ~/peda-arm/peda-arm.py\n end\n"
+        echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-arm \$@" > /bin/peda-arm
 
-        echo -e "define peda-intel\n source ~/peda-intel/peda-intel.py\n end" >> ~/.gdbinit
-        echo -e "#!/bin/sh\nexec gdb -ex peda-intel" > /bin/peda-intel
+        peda_intel="define init_peda-intel\n source ~/peda-arm/peda-intel.py\n end\n"
+        echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-intel \$@" > /bin/peda-intel
     else
         git clone https://github.com/alset0326/peda-arm.git ~/peda-arm
         if [[ $? == 0 ]] ; then
-            echo -e "define peda-arm\n source ~/peda-arm/peda-arm.py\n end" >> ~/.gdbinit
-            echo -e "#!/bin/sh\nexec gdb -ex peda-arm" > /bin/peda-arm
+            peda_arm="define init_peda-arm\n source ~/peda-arm/peda-arm.py\n end\n"
+            echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-arm \$@" > /bin/peda-arm
 
-            echo -e "define peda-intel\n source ~/peda-intel/peda-intel.py\n end" >> ~/.gdbinit
-            echo -e "#!/bin/sh\nexec gdb -ex peda-intel" > /bin/peda-intel
+            peda_intel="define init_peda-intel\n source ~/peda-arm/peda-intel.py\n end\n"
+            echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-intel \$@" > /bin/peda-intel
         else
             info "error" 利用git获取peda-arm失败，请检查网络配置
             exit -1
@@ -406,13 +411,16 @@ function gdb_install(){
     
     if [[ -e ~/pwndbg ]]; then
         info "wrong" "pwndbg已安装，不需要重复安装"
-        echo -e "define pwndbg\n source ~/pwndbg/gdbinit.py\n end" >> ~/.gdbinit
-        echo -e "#!/bin/sh\nexec gdb -ex pwndbg" > /bin/pwndbg
+        pwndbg="define init_pwndbg\n source ~/pwndbg/gdbinit.py\n end\n"
+        echo -e "#!/bin/sh\nexec gdb -q  -ex init_pwndbg \$@" > /bin/pwndbg
     else
         git clone https://github.com/pwndbg/pwndbg.git ~/pwndbg
         if [[ $? == 0 ]] ; then
-            echo -e "define pwndbg\n source ~/pwndbg/gdbinit.py\n end" >> ~/.gdbinit
-            echo -e "#!/bin/sh\nexec gdb -ex pwndbg" > /bin/pwndbg
+            curr_dir=$(pwd)
+            cd ~/pwndbg
+            ./setup.sh
+            pwndbg="define init_pwndbg\n source ~/pwndbg/gdbinit.py\n end\n"
+            echo -e "#!/bin/sh\nexec gdb -q -ex init_pwndbg \$@ " > /bin/pwndbg
         else
             info "error" 利用git获取pwndbg失败，请检查网络配置
             exit -1
@@ -420,19 +428,20 @@ function gdb_install(){
     fi
     if [[ -e ~/gef ]]; then
         info "wrong" "gef已安装，不需要重复安装"
-        echo -e "define gef\n source ~/gef/geg.py\n end" >> ~/.gdbinit
-        echo -e "#!/bin/sh\nexec gdb -ex gef" > /bin/gef
+        gef="define init_gef\n source ~/gef/gef.py\n end\n"
+        echo -e "#!/bin/sh\nexec gdb -q -ex init_gef \$@" > /bin/gef
     else
         git clone https://github.com/hugsy/gef.git ~/gef
         if [[ $? == 0 ]] ; then
-            echo -e "define gef\n source ~/gef/gef.py\n end" >> ~/.gdbinit
-            echo -e "#!/bin/sh\nexec gdb -ex gef" > /bin/gef
+            gef="define init_gef\n source ~/gef/gef.py\n end\n"
+            echo -e "#!/bin/sh\nexec gdb -q -ex init_gef \$@" > /bin/gef
         else
             info "error" 利用git获取gef失败，请检查网络配置
             exit -1
         fi
     fi
 
+    rm -rf ~/.gdbinit 2>/dev/null >/dev/null
     chmod +x /bin/peda
     chmod +x /bin/peda-arm
     chmod +x /bin/peda-intel
@@ -440,24 +449,25 @@ function gdb_install(){
     chmod +x /bin/pwndbg
     get_yesno "在执行gdb命令时是否使用默认gdb" 1 1
     if [[ $? != 0 ]]; then
-        gdb_data=$(cat ~/.gdbinit)
         echo -n -e "请输入默认执行gdb命令时，使用的插件 ["$high"pwndbg"$reset"/peda/peda-arm/peda-intel/gef]"
         if [[ $is_def == 0 ]]; then 
             gdb_var="pwndbg"   
         else
             read gdb_var
-            if [[ -e $gdb_var ]]; then
+            if [[ -z $gdb_var ]]; then
                 gdb_var="pwndbg"
             fi
         fi
+
         case $gdb_var in
-            peda) echo -e "source ~/peda/peda.py\n"$gdb_data > ~/.gdbinit ;;
-            peda-arm) echo -e "source ~/peda-arm/peda-arm.py\n"$gdb_data > ~/.gdbinit ;;
-            peda-intel) echo -e "source ~/peda-arm/peda-intel.py\n"$gdb_data > ~/.gdbinit ;;
-            pwndbg) echo -e "source ~/pwndbg/gdbinit.py\n"$gdb_data > ~/.gdbinit ;;
-            gef) echo -e "source ~/gef/gef.py\n"$gdb_data > ~/gdbinit ;;
+            peda) echo -e "source ~/peda/peda.py\n" > ~/.gdbinit ;;
+            peda-arm) echo -e "source ~/peda-arm/peda-arm.py\n" > ~/.gdbinit ;;
+            peda-intel) echo -e "source ~/peda-arm/peda-intel.py\n"> ~/.gdbinit ;;
+            pwndbg) echo -e "source ~/pwndbg/gdbinit.py\n" > ~/.gdbinit ;;
+            gef) echo -e "source ~/gef/gef.py\n" > ~/gdbinit ;;
         esac
     fi
+    echo -e $peda$peda_arm$peda_intel$pwndbg$gef >> ~/.gdbinit
     info "info" "gdb install success"
 
 }
