@@ -6,7 +6,6 @@ is_def=1
 function get_yesno(){   
     #  args1==输出的消息
     #  args2==默认值  0==yes  1==no
-    #  args3==是否默认 0==yes 1==no
     poss=("yes" "no")
     litt_poss=("y" "n")
     info=$1
