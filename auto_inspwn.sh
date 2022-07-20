@@ -443,7 +443,7 @@ function gdb_install(){
         gdb_data=$(cat ~/.gdbinit)
         echo -n -e "请输入默认执行gdb命令时，使用的插件 ["$high"pwndbg"$reset"/peda/peda-arm/peda-intel/gef]"
         if [[ $is_def == 0 ]]; then 
-            $gdb_var="pwndbg"   
+            gdb_var="pwndbg"   
         else
             read gdb_var
             if [[ -e $gdb_var ]]; then
