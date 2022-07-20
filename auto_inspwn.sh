@@ -364,110 +364,122 @@ function gdb_install(){
     local pwndbg=""
     local peda_intel=""
     local gef=""
+    local is_err=0
     if [[ $? != 0 ]];then
         apt install gdb -y
     fi
-    
-    git --version >/dev/null 2>/dev/null
-    if [[ $? != 0 ]]; then
-        apt install git -y
-    fi
-    mv ~/.gdbinit ~/.gdbinit.back 2>/dev/null
-    if [[ -e ~/peda ]]; then
-        info "wrong" "peda已安装，不需要重复安装"
-        peda="define init_peda\n source ~/peda/peda.py\n end\n"
-        echo -e "#!/bin/sh\nexec gdb -q -ex init_peda \$@" > /bin/peda
-    else
-        git clone https://github.com/longld/peda.git ~/peda
-        if [[ $? == 0 ]] ; then
+    while [[ 1 = 1 ]]
+    do
+        git --version >/dev/null 2>/dev/null
+        if [[ $? != 0 ]]; then
+            apt install git -y
+        fi
+        mv ~/.gdbinit ~/.gdbinit.back 2>/dev/null
+        if [[ -e ~/peda ]]; then
+            info "wrong" "peda已安装，不需要重复安装"
             peda="define init_peda\n source ~/peda/peda.py\n end\n"
             echo -e "#!/bin/sh\nexec gdb -q -ex init_peda \$@" > /bin/peda
         else
-            info "error" 利用git获取peda失败，请检查网络配置
-            exit -1
+            git clone https://github.com/longld/peda ~/peda
+            if [[ $? == 0 ]] ; then
+                peda="define init_peda\n source ~/peda/peda.py\n end\n"
+                echo -e "#!/bin/sh\nexec gdb -q -ex init_peda \$@" > /bin/peda
+            else
+                info "error" 利用git获取peda失败，请检查网络配置
+                is_err=1
+                break
+            fi
         fi
-    fi
-    
-    if [[ -e ~/peda-arm ]]; then
-        info "wrong" "peda-arm已安装，不需要重复安装"
-        peda_arm="define init_peda-arm\n source ~/peda-arm/peda-arm.py\n end\n"
-        echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-arm \$@" > /bin/peda-arm
-
-        peda_intel="define init_peda-intel\n source ~/peda-arm/peda-intel.py\n end\n"
-        echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-intel \$@" > /bin/peda-intel
-    else
-        git clone https://github.com/alset0326/peda-arm.git ~/peda-arm
-        if [[ $? == 0 ]] ; then
+        
+        if [[ -e ~/peda-arm ]]; then
+            info "wrong" "peda-arm已安装，不需要重复安装"
             peda_arm="define init_peda-arm\n source ~/peda-arm/peda-arm.py\n end\n"
             echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-arm \$@" > /bin/peda-arm
-
+    
             peda_intel="define init_peda-intel\n source ~/peda-arm/peda-intel.py\n end\n"
             echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-intel \$@" > /bin/peda-intel
         else
-            info "error" 利用git获取peda-arm失败，请检查网络配置
-            exit -1
-        fi
-    fi
+            git clone https://github.com/alset0326/peda-arm ~/peda-arm
+            if [[ $? == 0 ]] ; then
+                peda_arm="define init_peda-arm\n source ~/peda-arm/peda-arm.py\n end\n"
+                echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-arm \$@" > /bin/peda-arm
     
-    if [[ -e ~/pwndbg ]]; then
-        info "wrong" "pwndbg已安装，不需要重复安装"
-        pwndbg="define init_pwndbg\n source ~/pwndbg/gdbinit.py\n end\n"
-        echo -e "#!/bin/sh\nexec gdb -q  -ex init_pwndbg \$@" > /bin/pwndbg
-    else
-        git clone https://github.com/pwndbg/pwndbg.git ~/pwndbg
-        if [[ $? == 0 ]] ; then
-            curr_dir=$(pwd)
-            cd ~/pwndbg
-            ./setup.sh
-            pwndbg="define init_pwndbg\n source ~/pwndbg/gdbinit.py\n end\n"
-            echo -e "#!/bin/sh\nexec gdb -q -ex init_pwndbg \$@ " > /bin/pwndbg
-        else
-            info "error" 利用git获取pwndbg失败，请检查网络配置
-            exit -1
+                peda_intel="define init_peda-intel\n source ~/peda-arm/peda-intel.py\n end\n"
+                echo -e "#!/bin/sh\nexec gdb -q -ex init_peda-intel \$@" > /bin/peda-intel
+            else
+                info "error" 利用git获取peda-arm失败，请检查网络配置
+                is_err=1
+                break
+            fi
         fi
-    fi
-    if [[ -e ~/gef ]]; then
-        info "wrong" "gef已安装，不需要重复安装"
-        gef="define init_gef\n source ~/gef/gef.py\n end\n"
-        echo -e "#!/bin/sh\nexec gdb -q -ex init_gef \$@" > /bin/gef
-    else
-        git clone https://github.com/hugsy/gef.git ~/gef
-        if [[ $? == 0 ]] ; then
+        
+        if [[ -e ~/pwndbg ]]; then
+            info "wrong" "pwndbg已安装，不需要重复安装"
+            pwndbg="define init_pwndbg\n source ~/pwndbg/gdbinit.py\n end\n"
+            echo -e "#!/bin/sh\nexec gdb -q  -ex init_pwndbg \$@" > /bin/pwndbg
+        else
+            git clone https://github.com/pwndbg/pwndbg ~/pwndbg
+            if [[ $? == 0 ]] ; then
+                curr_dir=$(pwd)
+                cd ~/pwndbg
+                ./setup.sh
+                pwndbg="define init_pwndbg\n source ~/pwndbg/gdbinit.py\n end\n"
+                echo -e "#!/bin/sh\nexec gdb -q -ex init_pwndbg \$@ " > /bin/pwndbg
+            else
+                info "error" 利用git获取pwndbg失败，请检查网络配置
+                is_err=1
+                break
+            fi
+        fi
+        if [[ -e ~/gef ]]; then
+            info "wrong" "gef已安装，不需要重复安装"
             gef="define init_gef\n source ~/gef/gef.py\n end\n"
             echo -e "#!/bin/sh\nexec gdb -q -ex init_gef \$@" > /bin/gef
         else
-            info "error" 利用git获取gef失败，请检查网络配置
-            exit -1
-        fi
-    fi
-
-    rm -rf ~/.gdbinit 2>/dev/null >/dev/null
-    chmod +x /bin/peda
-    chmod +x /bin/peda-arm
-    chmod +x /bin/peda-intel
-    chmod +x /bin/gef
-    chmod +x /bin/pwndbg
-    get_yesno "在执行gdb命令时是否使用默认gdb" 1 1
-    if [[ $? != 0 ]]; then
-        echo -n -e "请输入默认执行gdb命令时，使用的插件 ["$high"pwndbg"$reset"/peda/peda-arm/peda-intel/gef]"
-        if [[ $is_def == 0 ]]; then 
-            gdb_var="pwndbg"   
-        else
-            read gdb_var
-            if [[ -z $gdb_var ]]; then
-                gdb_var="pwndbg"
+            git clone https://github.com/hugsy/gef ~/gef
+            if [[ $? == 0 ]] ; then
+                gef="define init_gef\n source ~/gef/gef.py\n end\n"
+                echo -e "#!/bin/sh\nexec gdb -q -ex init_gef \$@" > /bin/gef
+            else
+                info "error" 利用git获取gef失败，请检查网络配置
+                is_err=1
+                break
             fi
         fi
-
-        case $gdb_var in
-            peda) echo -e "source ~/peda/peda.py\n" > ~/.gdbinit ;;
-            peda-arm) echo -e "source ~/peda-arm/peda-arm.py\n" > ~/.gdbinit ;;
-            peda-intel) echo -e "source ~/peda-arm/peda-intel.py\n"> ~/.gdbinit ;;
-            pwndbg) echo -e "source ~/pwndbg/gdbinit.py\n" > ~/.gdbinit ;;
-            gef) echo -e "source ~/gef/gef.py\n" > ~/gdbinit ;;
-        esac
+        break
+    done    
+    rm -rf ~/.gdbinit 2>/dev/null >/dev/null
+    chmod +x /bin/peda 2>/dev/null
+    chmod +x /bin/peda-arm 2>/dev/null
+    chmod +x /bin/peda-intel 2>/dev/null
+    chmod +x /bin/gef 2>/dev/null
+    chmod +x /bin/pwndbg 2>/dev/null
+    if [[ $is_err == 0 ]]; then
+        get_yesno "在执行gdb命令时是否使用默认gdb" 1 1
+        if [[ $? != 0 ]]; then
+            echo -n -e "请输入默认执行gdb命令时，使用的插件 ["$high"pwndbg"$reset"/peda/peda-arm/peda-intel/gef]"
+            if [[ $is_def == 0 ]]; then 
+                gdb_var="pwndbg"   
+            else
+                read gdb_var
+                if [[ -z $gdb_var ]]; then
+                    gdb_var="pwndbg"
+                fi
+            fi
+    
+            case $gdb_var in
+                peda) echo -e "source ~/peda/peda.py\n" > ~/.gdbinit ;;
+                peda-arm) echo -e "source ~/peda-arm/peda-arm.py\n" > ~/.gdbinit ;;
+                peda-intel) echo -e "source ~/peda-arm/peda-intel.py\n"> ~/.gdbinit ;;
+                pwndbg) echo -e "source ~/pwndbg/gdbinit.py\n" > ~/.gdbinit ;;
+                gef) echo -e "source ~/gef/gef.py\n" > ~/gdbinit ;;
+            esac
+        fi
     fi
     echo -e $peda$peda_arm$peda_intel$pwndbg$gef >> ~/.gdbinit
+    if [[ $is_err != 0 ]]; then
+        exit -1
+    fi
     info "info" "gdb install success"
 
 }
