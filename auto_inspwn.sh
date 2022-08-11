@@ -32,12 +32,8 @@ function info(){
 
 function change_apt_source(){
     info "info" "change apt source start"
-    ubuntu_lsb=$(lsb_release -a 2>/dev/null|\
-         awk -F " " '{\
-            if ( $1    ~ /Codename/ ){\
-                print $2\
-             }\
-           }')
+    export $(cat /etc/lsb-release) 
+    ubuntu_lsb=$DISTRIB_CODENAME
 
     method="https"
     iptype="4"
