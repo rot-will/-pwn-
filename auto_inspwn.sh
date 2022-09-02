@@ -32,7 +32,7 @@ function info(){
 
 function change_apt_source(){
     info "info" "change apt source start"
-    export $(cat /etc/lsb-release) 
+    export $(cat /etc/lsb-release) 2>/dev/null
     ubuntu_lsb=$DISTRIB_CODENAME
 
     method="https"
