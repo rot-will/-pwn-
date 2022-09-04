@@ -591,9 +591,9 @@ function binwalk_install(){
     info "info" "binwalk install start"
     binwalk -v 2>/dev/null >/dev/null
     if [[ $? != 0 ]]; then
-        wget "https://github.com/ReFirmLabs/binwalk/archive/refs/tags/v2.3.3.zip" -T 4
-        unzip "v2.3.3.zip"
-        cd "binwalk-2.3.3"
+        git clone https://github.com/liyansong2018/binwalk
+        unzip "binwalk-master.zip"
+        cd "binwalk-master"
         python3 setup.py install
         while [[ $? != 0 ]];
         do
@@ -609,8 +609,8 @@ function binwalk_install(){
             python3 setup.py install
         done
         cd ..
-        rm -rf "v2.3.3.zip"
-        rm -rf "binwalk-2.3.3"
+        rm -rf "binwalk-master.zip"
+        rm -rf "binwalk-master"
     else
         info "wrong" "binwalk已安装，无需重新安装"
     fi
