@@ -592,8 +592,7 @@ function binwalk_install(){
     binwalk -v 2>/dev/null >/dev/null
     if [[ $? != 0 ]]; then
         git clone https://github.com/liyansong2018/binwalk
-        unzip "binwalk-master.zip"
-        cd "binwalk-master"
+        cd "binwalk"
         ./deps.sh
         python3 setup.py install
         while [[ $? != 0 ]];
